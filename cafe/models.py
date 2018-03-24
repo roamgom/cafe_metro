@@ -9,6 +9,7 @@ class Station(models.Model):
 
     line = models.PositiveSmallIntegerField(choices=LINE_CHOICES)
     name = models.CharField(max_length=80)
+
     # location = models.IntegerField()
 
     def __str__(self):
@@ -25,6 +26,7 @@ class Cafe(models.Model):
     latest_review_uploaded_time = models.DateTimeField(null=True)
 
     score = models.PositiveSmallIntegerField(default=0)
+
     # run function without call()
 
     # @property
@@ -44,14 +46,19 @@ class CafeUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     favorite = models.ManyToManyField(Cafe)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Review(models.Model):
+    STAR_CHOICES = tuple((i, str(i)) for i in range(1, 6))
+
     user = models.ForeignKey(CafeUser, on_delete=models.CASCADE)
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE)
     upload_time = models.DateTimeField(auto_now=True)
     # use decimal instead of float field
     # use decimal in currency etc.
-    star = models.PositiveSmallIntegerField(default=0)
+    star = models.PositiveSmallIntegerField(choices=STAR_CHOICES)
     title = models.CharField(max_length=200, default='')
     review = models.TextField()
 

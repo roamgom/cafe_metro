@@ -1,4 +1,3 @@
-
 from rest_framework import generics
 from rest_framework import renderers
 from rest_framework.decorators import api_view
@@ -12,31 +11,16 @@ from .serializers import ReviewSerializer
 
 
 class StationDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Station.objects.all()
     serializer_class = StationSerializer
 
 
-class CafeList(generics.ListCreateAPIView):
-
-    queryset = Cafe.objects.all()
-    serializer_class = CafeSerializer
-
-
 class CafeDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Cafe.objects.all()
     serializer_class = CafeSerializer
-
-
-class ReviewList(generics.ListCreateAPIView):
-
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
@@ -47,4 +31,3 @@ def station_root(request, format=None):
         'station': request('station-detail', request=request, format=format),
         'cafe': reverse('cafe-list', request=request, format=format),
     })
-
