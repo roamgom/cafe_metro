@@ -6,7 +6,16 @@ from .models import CafeUser
 from .models import Review
 
 
-admin.site.register(Cafe)
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_filter = ['cafe']
+
+
+@admin.register(Cafe)
+class CafeAdmin(admin.ModelAdmin):
+    list_filter = ['station']
+
+
 admin.site.register(Station)
 admin.site.register(CafeUser)
-admin.site.register(Review)
+

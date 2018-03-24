@@ -7,9 +7,12 @@ class Station(models.Model):
         (2, '2호선'),
     )
 
-    line = models.PositiveSmallIntegerField(max_length=1, choices=LINE_CHOICES)
+    line = models.PositiveSmallIntegerField(choices=LINE_CHOICES)
     name = models.CharField(max_length=80)
     # location = models.IntegerField()
+
+    def __str__(self):
+        return self.name
 
 
 class Cafe(models.Model):
@@ -17,11 +20,11 @@ class Cafe(models.Model):
     name = models.CharField(max_length=200)
 
     # remind about the value for GPS
-    location = models.CharField()
+    location = models.CharField(max_length=300)
     # average star depend on Review model
     latest_review_uploaded_time = models.DateTimeField(null=True)
 
-    score = models.PositiveSmallIntegerField()
+    score = models.PositiveSmallIntegerField(default=0)
     # run function without call()
 
     # @property
@@ -33,6 +36,9 @@ class Cafe(models.Model):
         self.save()
         return self.score
 
+    def __str__(self):
+        return self.name
+
 
 class CafeUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -40,17 +46,22 @@ class CafeUser(models.Model):
 
 
 class Review(models.Model):
-    id = models.ManyToManyField(CafeUser)
+    user = models.ForeignKey(CafeUser, on_delete=models.CASCADE)
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE)
-    upload_time = models.TimeField(auto_now_add=True)
+    upload_time = models.DateTimeField(auto_now=True)
     # use decimal instead of float field
     # use decimal in currency etc.
-    star = models.PositiveSmallIntegerField()
+    star = models.PositiveSmallIntegerField(default=0)
+    title = models.CharField(max_length=200, default='')
     review = models.TextField()
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, *args, **kwargs):
         self.cafe.latest_review_uploaded_time = self.upload_time
         # call save from models.Model save before overriding
-        super(Review).save(force_insert=False, force_update=False, using=None,
-                           update_fields=None)
+        super(Review, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ('upload_time',)
