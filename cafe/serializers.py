@@ -6,33 +6,33 @@ from rest_framework import permissions
 from .models import Station, Cafe, Review
 
 
-class SimpleReviewSerializer(serializers.ModelSerializer):
+class SimpleReviewSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Review
-        fields = ('id', 'title', 'star')
+        fields = ('url', 'id', 'title', 'star')
 
 
 # add queryset like date, star
-class CafeSerializer(serializers.ModelSerializer):
+class CafeSerializer(serializers.HyperlinkedModelSerializer):
     review_set = SimpleReviewSerializer(many=True)
 
     class Meta:
         model = Cafe
-        fields = ('id', 'station', 'name', 'location', 'score', 'review_set')
+        fields = ('url', 'id', 'station', 'name', 'location', 'get_score', 'review_set')
 
 
-class SimpleCafeSerializer(serializers.ModelSerializer):
+class SimpleCafeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Cafe
-        fields = ('id', 'name', 'score')
+        fields = ('url', 'id', 'name', 'score')
 
 
-class StationSerializer(serializers.ModelSerializer):
+class StationSerializer(serializers.HyperlinkedModelSerializer):
     cafe_set = SimpleCafeSerializer(many=True)
 
     class Meta:
         model = Station
-        fields = ('line', 'name', 'cafe_set')
+        fields = ('url', 'line', 'name', 'cafe_set')
 
 
 class ReviewSerializer(serializers.ModelSerializer):

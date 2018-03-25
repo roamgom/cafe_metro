@@ -25,17 +25,18 @@ class Cafe(models.Model):
     # average star depend on Review model
     latest_review_uploaded_time = models.DateTimeField(null=True)
 
-    score = models.PositiveSmallIntegerField(default=0)
+    score = models.FloatField(default=0)
 
     # run function without call()
 
     # @property
-    # happen when get called like get_score
+    # get cafe average score by review stars
     def get_score(self):
-        if self.latest_review_uploaded_time == self.review_set.latest().upload_time:
+        if self.latest_review_uploaded_time == self.review_set.latest(field_name='upload_time'):
             return self.score
-        self.score = sum(list(map(lambda x: x.star, self.review_set.all()))) / self.review_set.count()
-        self.save()
+        # self.latest_review_uploaded_time = self.review_set.latest().upload_time
+        self.score = round(sum(list(map(lambda x: x.star, self.review_set.all()))) / self.review_set.count(), 1)
+        super(Cafe, self).save()
         return self.score
 
     def __str__(self):
@@ -51,6 +52,7 @@ class CafeUser(models.Model):
 
 
 class Review(models.Model):
+    # star rank between 1-5
     STAR_CHOICES = tuple((i, str(i)) for i in range(1, 6))
 
     user = models.ForeignKey(CafeUser, on_delete=models.CASCADE)

@@ -1,8 +1,6 @@
 from rest_framework import generics
-from rest_framework import renderers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 
 from .models import Station, Cafe, Review
 from .serializers import StationSerializer
@@ -29,5 +27,4 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 def station_root(request, format=None):
     return Response({
         'station': request('station-detail', request=request, format=format),
-        'cafe': reverse('cafe-list', request=request, format=format),
     })
