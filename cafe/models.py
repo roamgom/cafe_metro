@@ -10,15 +10,13 @@ class Station(models.Model):
     line = models.PositiveSmallIntegerField(choices=LINE_CHOICES)
     name = models.CharField(max_length=80)
 
-    # location = models.IntegerField()
-
     def __str__(self):
         return self.name
 
 
 class Cafe(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=254)
 
     # remind about the value for GPS
     location = models.CharField(max_length=300)
