@@ -10,6 +10,13 @@ from .serializers import StationSerializer
 from .serializers import CafeSerializer
 from .serializers import ReviewSerializer
 from .serializers import UserSerializer
+from .serializers import StationListSerializer
+
+
+class StationList(generics.ListAPIView):
+
+    queryset = Station.objects.all()
+    serializer_class = StationListSerializer
 
 
 class StationDetail(generics.RetrieveUpdateDestroyAPIView):

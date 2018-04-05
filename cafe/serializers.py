@@ -35,6 +35,12 @@ class StationSerializer(serializers.ModelSerializer):
         fields = ('line', 'name', 'cafe_set')
 
 
+class StationListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Station
+        fields = ('id', 'line', 'name')
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
